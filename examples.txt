@@ -1,0 +1,41 @@
+-- Plinkus programs -- Scaling difficulty --
+print ("hi")
+print (2) 
+print ("2")
+print (2.3343) 
+print (2.4 + 4.566)
+
+-- Output -- 
+
+hi 
+2
+2
+2.3343 
+6.966
+
+--- Program 2 ----
+
+let x = 2 
+
+if (x > 3) {
+
+    print("x>3")
+
+} else {
+
+    print("x<=3")
+}
+
+-- Output -- 
+
+x<=3
+
+Statements terminated by ;
+Comments: -- comment
+Variables: let x = expr;
+Print: print(expr);
+Types: int, float, str — dynamically typed, no annotations, int→float promotion on mixed arithmetic
+Arithmetic: + - * / at minimum (worth confirming / behavior — does int / int give int or promote to float like Python 3? Same promotion logic probably applies)
+Comparisons: < > <= >= == !=
+Control flow: if (cond) { ... } else { ... }, block-scoped with braces
+No logical operators (&&/||/!) — explicitly out of scope
