@@ -196,7 +196,7 @@ def tokenize(source):
     return tokens
 
 
-with open("Try1.txt") as f:
+with open("Try1.plink") as f:
     source = f.read() + "\0"
     tokenize(source)
 
