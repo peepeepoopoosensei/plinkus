@@ -52,11 +52,20 @@ class Parser:
         self.current = 0
 
     # ---------- low-level cursor helpers ----------
+    
+    # returns current token thats on cursor 
+
     def peek(self):
         return self.tokens[self.current]
 
+
+    # chkecks whether cursor token is the type we are asking about 
+
     def check(self, ttype):
         return self.peek().type == ttype
+
+
+    # stores token on cursor then moves cursor if its not eof , outputs token of cursor before the move 
 
     def advance(self):
         tok = self.peek()
@@ -64,11 +73,18 @@ class Parser:
             self.current += 1
         return tok
 
+
+    # creates tuples of types we accept (*ttypes creates tuple of things you give), if cursor token is in those we move the cursor and return true otherwise we leave       the token where it is and return false 
+
     def match(self, *ttypes):
         if self.peek().type in ttypes:
             self.advance()
             return True
         return False
+
+
+    # consume is like match but it expects one type since it is demanded for a specific token and if its not that it raises an error
+    # it returns the token on cursor because it calls self.advance then moves obviously 
 
     def consume(self, ttype, message):
         if self.check(ttype):
