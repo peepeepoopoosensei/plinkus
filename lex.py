@@ -63,6 +63,9 @@ KEYWORDS = {
 #Tokenization
 
 def tokenize(source):
+    # Add the "\0" end marker here, so callers can't forget it.
+    # (If one is already there, the extra one is never reached: the first "\0" breaks the loop.)
+    source = source + "\0"
     tokens = []
     pos = 0
     line = 1
@@ -192,11 +195,11 @@ def tokenize(source):
     
         
     tokens.append(Token(TokenType.EOF, "", line))
-    print(tokens)
     return tokens
 
 
-with open("Try1.plink") as f:
-    source = f.read() + "\0"
-    tokenize(source)
-
+# Only runs when you do `python lex.py` directly, NOT when another file imports lex.
+if __name__ == "__main__":
+    with open("Try1.plink") as f:
+        source = f.read()
+    print(tokenize(source))

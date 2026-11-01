@@ -17,7 +17,7 @@ class Unary:
     line: int
 @dataclass
 class Binary:
-    op: str # e.g. '+', '&lt;=', '=='
+    op: str # e.g. '+', '<=', '=='
     left: object # an expression node
     right: object # an expression node
     line: int
@@ -216,4 +216,3 @@ class Parser:
             self.consume(TokenType.RPAREN, "expected ')' after expression")
             return expr
         raise SyntaxError(f"Line {tok.line}: expected an expression")
-
