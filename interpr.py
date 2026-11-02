@@ -1,9 +1,5 @@
 
-"""Plinkus tree-walking interpreter.
 
-Takes the list of statement nodes produced by the Parser and runs them
-directly by walking the tree: no compiler, no bytecode, no VM.
-"""
 from abstree import (Literal, Variable, Unary, Binary,
                      PrintStmt, LetStmt, ExprStmt, Block, IfStmt)
 
@@ -20,8 +16,8 @@ class PlinkusRuntimeError(Exception):
 
 
 def is_number(value):
-    # Use type(), not isinstance(): in Python, bool is a subclass of int,
-    # so isinstance(True, int) is True. We don't want True + 1 to work.
+    # in Python bool is a subclass of int
+    # so isinstance(True, int) is True we dont want True + 1 to work
     return type(value) in (int, float)
 
 
@@ -32,12 +28,11 @@ def type_name(value):
 
 class Interpreter:
     def __init__(self):
-        # One global table of variables: name -> value.
+        # One global table of variables: name to value.
         self.variables = {}
 
-    # ------------------------------------------------------------------
-    # Statements: execute() DOES something and returns nothing.
-    # ------------------------------------------------------------------
+    # statements : execute() DOES something and returns nothing.
+
     def run(self, statements):
         for stmt in statements:
             self.execute(stmt)
@@ -73,9 +68,9 @@ class Interpreter:
                 f"unknown statement type {type(stmt).__name__}",
                 getattr(stmt, "line", "?"))
 
-    # ------------------------------------------------------------------
-    # Expressions: evaluate() RETURNS a value.
-    # ------------------------------------------------------------------
+    
+    # expressions  evaluate() RETURNS a value.
+    
     def evaluate(self, expr):
         if isinstance(expr, Literal):
             return expr.value
@@ -97,7 +92,7 @@ class Interpreter:
                 f"unknown unary operator '{expr.op}'", expr.line)
 
         if isinstance(expr, Binary):
-            # Evaluate BOTH children first (post-order), then combine.
+            # evlaluate BOTH children first then combine
             left = self.evaluate(expr.left)
             right = self.evaluate(expr.right)
             return self.binary(expr.op, left, right, expr.line)
@@ -107,23 +102,23 @@ class Interpreter:
             getattr(expr, "line", "?"))
 
     def binary(self, op, a, b, line):
-        # Equality works between any two values.
+        # equality works between any two values
         if op == '==':
             return a == b
         if op == '!=':
             return a != b
 
-        # String concatenation: str + str only.
+        # string concatenation: str + str only
         if op == '+' and type(a) is str and type(b) is str:
             return a + b
 
-        # Everything else needs two numbers.
+        # everything else needs two numbers
         if not (is_number(a) and is_number(b)):
             raise PlinkusRuntimeError(
                 f"cannot apply '{op}' to {type_name(a)} and {type_name(b)}", line)
 
-        # Python already matches the Plinkus rules here:
-        #   int op int -> int, int op float -> float (automatic promotion)
+
+        #   int op int to int, int op float to float (automatic promotion)
         if op == '+':
             return a + b
         if op == '-':
@@ -133,7 +128,7 @@ class Interpreter:
         if op == '/':
             if b == 0:
                 raise PlinkusRuntimeError("division by zero", line)
-            return a / b              # Python's / always gives a float, as designed
+            return a / b              
         if op == '<':
             return a < b
         if op == '>':
@@ -164,7 +159,7 @@ def main():
         statements = Parser(tokenize(source)).parse()
         Interpreter().run(statements)
     except (SyntaxError, PlinkusRuntimeError) as error:
-        print(error)   # show the error with its line number, then stop
+        print(error)   
 
 
 if __name__ == "__main__":
